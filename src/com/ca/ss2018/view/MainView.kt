@@ -1,20 +1,18 @@
 package com.ca.ss2018.view
 
 import com.ca.ss2018.contract.MainContract
+import java.awt.Container
 import java.awt.Dimension
-import java.awt.Point
-import javax.swing.JButton
-import javax.swing.JFrame
-import javax.swing.JPanel
-import javax.swing.JTextField
+import javax.swing.*
 
 class MainView : JFrame(), MainContract.IMainView {
 
     private var presenter: MainContract.IMainPresenter? = null
-    private var panel = JPanel()
+    private lateinit var container: Container
+    private val layout = SpringLayout()
     private val selectFileButton = JButton("Select xls file")
     private val startButton = JButton("START")
-    private val JTextField = JTextField()
+    private val filePathTextField = JTextField()
 
     init {
         createUI()
@@ -22,24 +20,32 @@ class MainView : JFrame(), MainContract.IMainView {
 
     private fun createUI() {
         this.title = "Secret Santa CA 2018"
-        this.size = Dimension(300, 200)
+        this.size = Dimension(500, 300)
         this.setLocationRelativeTo(null)
-        panel.layout = null
+        this.container = this.contentPane
+        container.layout = layout
         setComponents()
         placeComponents()
+        this.pack()
     }
 
     private fun setComponents() {
         selectFileButton.size = Dimension(50, 20)
+        startButton.size = Dimension(40, 20)
+        filePathTextField.size = Dimension(100, 20)
     }
 
-    private fun placeComponents(){
-        selectFileButton.location = Point(5,5)
-        panel.add(selectFileButton)
+    private fun placeComponents() {
+        container.add(selectFileButton)
+        container.add(startButton)
+        val constraints = layout.getConstraints(startButton)
+        constraints.x = Spring.constant(450)
+        constraints.y = Spring.constant(250)
+        container.add(filePathTextField)
     }
 
     override fun onDettach() {
-        presenter =null
+        presenter = null
     }
 
     override fun onAttach(presenter: MainContract.IMainPresenter) {
